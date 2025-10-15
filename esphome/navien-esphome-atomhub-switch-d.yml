@@ -1,10 +1,19 @@
 substitutions:
   tx_pin: 23
   rx_pin: 33
+  platform: esp32
+  board: m5stack-atom
+  friendly_name: Navien
   project_name: Navien.ATOM-Hub-Switch-D
+  project_version: "0.0.0.1"
 
 packages:
-  navien: !include navien-esphome-atom-lite-esp32.yml
+  navien: !include navien-base.yml
+
+
+logger:
+  level: INFO
+  baud_rate: 0 #disable logging over uart
 
 dashboard_import:
   package_import_url: github://htumanyan/navien/esphome/navien-esphome-atomhub-switch-d.yml
@@ -29,7 +38,6 @@ switch:
     restore_mode: RESTORE_DEFAULT_OFF
 
 button:
-  - id: !remove NavienHotButton
   - platform: template
     name: "Hot Button"
     id: hot_button
@@ -37,3 +45,11 @@ button:
     - switch.turn_on: hot_button_relay
     - delay: 500ms
     - switch.turn_off: hot_button_relay
+
+light:
+  - platform: fastled_clockless
+    chipset: SK6812
+    pin: 27
+    num_leds: 1
+    rgb_order: GRB
+    name: "FastLED Light"
