@@ -25,13 +25,7 @@ switch:
   - platform: gpio
     id: hot_button_relay
     pin: 22
-    name: "Navien Enable Hot Button"
-    restore_mode: RESTORE_DEFAULT_ON
-  # Additional relay available for other uses (Relay 2 on GPIO19)
-  - platform: gpio
-    id: relay_2
-    pin: 19
-    name: "Relay 2"
+    name: "Navien Hot Button Relay"
     restore_mode: RESTORE_DEFAULT_OFF
 
 button:
@@ -40,6 +34,6 @@ button:
     name: "Hot Button"
     id: hot_button
     on_press:
-    - switch.turn_off: hot_button_relay
-    - delay: 1000ms
     - switch.turn_on: hot_button_relay
+    - delay: 500ms
+    - switch.turn_off: hot_button_relay
