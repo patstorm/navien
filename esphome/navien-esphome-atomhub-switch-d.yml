@@ -1,0 +1,61 @@
+substitutions:
+  tx_pin: 23
+  rx_pin: 33
+  platform: esp32
+  board: m5stack-atom
+  friendly_name: Navien
+  project_name: Navien.ATOM-Hub-Switch-D
+  project_version: "0.0.0.1"
+
+packages:
+  navien: !include navien-base.yml
+
+logger:
+  level: INFO
+  baud_rate: 0 #disable logging over uart
+
+dashboard_import:
+  package_import_url: github://htumanyan/navien/esphome/navien-esphome-atomhub-switch-d.yml
+  import_full_config: false
+
+# Physical button on ATOM (GPIO39)
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: 39
+      inverted: true
+    name: "ATOM Button"
+    on_press:
+      - button.press: hot_button
+
+# Hot button functionality using Relay 1 (GPIO22)
+switch:
+  - platform: gpio
+    id: hot_button_relay
+    pin: 22
+    name: "Navien Enable Hot Button"
+    restore_mode: RESTORE_DEFAULT_ON
+  # Additional relay available for other uses (Relay 2 on GPIO19)
+  - platform: gpio
+    id: relay_2
+    pin: 19
+    name: "Relay 2"
+    restore_mode: RESTORE_DEFAULT_OFF
+
+button:
+  - id: !remove rs485_hot_button
+  - platform: template
+    name: "Hot Button"
+    id: hot_button
+    on_press:
+    - switch.turn_off: hot_button_relay
+    - delay: 1000ms
+    - switch.turn_on: hot_button_relay
+
+light:
+  - platform: fastled_clockless
+    chipset: SK6812
+    pin: 27
+    num_leds: 1
+    rgb_order: GRB
+    name: "FastLED Light"
