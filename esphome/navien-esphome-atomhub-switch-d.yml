@@ -10,6 +10,7 @@ substitutions:
 packages:
   navien: !include navien-base.yml
 
+
 logger:
   level: INFO
   baud_rate: 0 #disable logging over uart
@@ -43,7 +44,6 @@ switch:
     restore_mode: RESTORE_DEFAULT_OFF
 
 button:
-  - id: !remove rs485_hot_button
   - platform: template
     name: "Hot Button"
     id: hot_button
